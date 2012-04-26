@@ -56,9 +56,6 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" \
 	"$(DESTDIR)$(datadir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libPyGubbins_la_LIBADD =
-libPyGubbins_la_SOURCES = libPyGubbins.c
-libPyGubbins_la_OBJECTS = libPyGubbins.lo
 libgubbins_la_LIBADD =
 am_libgubbins_la_OBJECTS = Newickform.lo alignment_file.lo \
 	block_tab_file.lo branch_sequences.lo fasta_of_snp_sites.lo \
@@ -101,10 +98,10 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = libPyGubbins.c $(libgubbins_la_SOURCES) $(gubbins_SOURCES) \
+SOURCES = $(libgubbins_la_SOURCES) $(gubbins_SOURCES) \
 	$(run_all_tests_SOURCES)
-DIST_SOURCES = libPyGubbins.c $(libgubbins_la_SOURCES) \
-	$(gubbins_SOURCES) $(run_all_tests_SOURCES)
+DIST_SOURCES = $(libgubbins_la_SOURCES) $(gubbins_SOURCES) \
+	$(run_all_tests_SOURCES)
 dist_dataDATA_INSTALL = $(INSTALL_DATA)
 DATA = $(dist_data_DATA)
 ETAGS = etags
@@ -222,7 +219,8 @@ gubbins_SOURCES = main.c
 gubbins_LDADD = -lz -lm libgubbins.la
 
 # libgubbins.so is our library
-lib_LTLIBRARIES = libgubbins.la libPyGubbins.la
+#lib_LTLIBRARIES = libgubbins.la libPyGubbins.la
+lib_LTLIBRARIES = libgubbins.la 
 libgubbins_la_SOURCES = Newickform.c alignment_file.c block_tab_file.c branch_sequences.c fasta_of_snp_sites.c gff_file.c gubbins.c parse_phylip.c parse_vcf.c phylib_of_snp_sites.c seqUtil.c snp_searching.c snp_sites.c tree_statistics.c vcf.c
 libgubbins_la_LDFLAGS = -version-info 0:1
 
@@ -306,8 +304,6 @@ clean-libLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libPyGubbins.la: $(libPyGubbins_la_OBJECTS) $(libPyGubbins_la_DEPENDENCIES) 
-	$(LINK) -rpath $(libdir) $(libPyGubbins_la_OBJECTS) $(libPyGubbins_la_LIBADD) $(LIBS)
 libgubbins.la: $(libgubbins_la_OBJECTS) $(libgubbins_la_DEPENDENCIES) 
 	$(libgubbins_la_LINK) -rpath $(libdir) $(libgubbins_la_OBJECTS) $(libgubbins_la_LIBADD) $(LIBS)
 install-binPROGRAMS: $(bin_PROGRAMS)
@@ -365,7 +361,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fasta_of_snp_sites.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gff_file.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gubbins.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libPyGubbins.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parse_phylip.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parse_vcf.Plo@am__quote@
