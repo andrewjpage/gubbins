@@ -32,8 +32,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = i686-apple-darwin9.8.0
-host_triplet = i686-apple-darwin9.8.0
+build_triplet = i386-apple-darwin9.8.0
+host_triplet = i386-apple-darwin9.8.0
 bin_PROGRAMS = gubbins$(EXEEXT)
 check_PROGRAMS = run_all_tests$(EXEEXT)
 subdir = src
@@ -56,12 +56,9 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" \
 	"$(DESTDIR)$(datadir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libPyGubbins_la_DEPENDENCIES = libgubbins.la
-am_libPyGubbins_la_OBJECTS = libPyGubbins_la-PyGubbins.lo
-libPyGubbins_la_OBJECTS = $(am_libPyGubbins_la_OBJECTS)
-libPyGubbins_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
-	$(CXXFLAGS) $(libPyGubbins_la_LDFLAGS) $(LDFLAGS) -o $@
+libPyGubbins_la_LIBADD =
+libPyGubbins_la_SOURCES = libPyGubbins.c
+libPyGubbins_la_OBJECTS = libPyGubbins.lo
 libgubbins_la_LIBADD =
 am_libgubbins_la_OBJECTS = Newickform.lo alignment_file.lo \
 	block_tab_file.lo branch_sequences.lo fasta_of_snp_sites.lo \
@@ -104,18 +101,9 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-LTCXXCOMPILE = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-CXXLD = $(CXX)
-CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
-SOURCES = $(libPyGubbins_la_SOURCES) $(libgubbins_la_SOURCES) \
-	$(gubbins_SOURCES) $(run_all_tests_SOURCES)
-DIST_SOURCES = $(libPyGubbins_la_SOURCES) $(libgubbins_la_SOURCES) \
+SOURCES = libPyGubbins.c $(libgubbins_la_SOURCES) $(gubbins_SOURCES) \
+	$(run_all_tests_SOURCES)
+DIST_SOURCES = libPyGubbins.c $(libgubbins_la_SOURCES) \
 	$(gubbins_SOURCES) $(run_all_tests_SOURCES)
 dist_dataDATA_INSTALL = $(INSTALL_DATA)
 DATA = $(dist_data_DATA)
@@ -189,9 +177,9 @@ am__quote =
 am__tar = ${AMTAR} chof - "$$tardir"
 am__untar = ${AMTAR} xf -
 bindir = ${exec_prefix}/bin
-build = i686-apple-darwin9.8.0
+build = i386-apple-darwin9.8.0
 build_alias = 
-build_cpu = i686
+build_cpu = i386
 build_os = darwin9.8.0
 build_vendor = apple
 builddir = .
@@ -200,9 +188,9 @@ datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-host = i686-apple-darwin9.8.0
+host = i386-apple-darwin9.8.0
 host_alias = 
-host_cpu = i686
+host_cpu = i386
 host_os = darwin9.8.0
 host_vendor = apple
 htmldir = ${docdir}
@@ -237,10 +225,11 @@ gubbins_LDADD = -lz -lm libgubbins.la
 lib_LTLIBRARIES = libgubbins.la libPyGubbins.la
 libgubbins_la_SOURCES = Newickform.c alignment_file.c block_tab_file.c branch_sequences.c fasta_of_snp_sites.c gff_file.c gubbins.c parse_phylip.c parse_vcf.c phylib_of_snp_sites.c seqUtil.c snp_searching.c snp_sites.c tree_statistics.c vcf.c
 libgubbins_la_LDFLAGS = -version-info 0:1
-libPyGubbins_la_SOURCES = PyGubbins.cpp
-libPyGubbins_la_LDFLAGS = -version-info 0:1
-libPyGubbins_la_CPPFLAGS = -I/usr/include/python2.7 # yeah, there are better ways to check (and to particularly not hardcode the py version)
-libPyGubbins_la_LIBADD = -lpython2.7 -lboost_python -lz -lm libgubbins.la
+
+#libPyGubbins_la_SOURCES = PyGubbins.cpp
+#libPyGubbins_la_LDFLAGS = -version-info 0:1
+#libPyGubbins_la_CPPFLAGS = -I/usr/include/python2.7 # yeah, there are better ways to check (and to particularly not hardcode the py version)
+#libPyGubbins_la_LIBADD = -lpython2.7 -lboost_python -lz -lm libgubbins.la
 
 # "make check" target
 TESTS = $(check_PROGRAMS)
@@ -260,7 +249,7 @@ run_all_tests_LDADD = -lm -lz -lcheck libgubbins.la
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .cpp .lo .o .obj
+.SUFFIXES: .c .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -318,7 +307,7 @@ clean-libLTLIBRARIES:
 	  rm -f "$${dir}/so_locations"; \
 	done
 libPyGubbins.la: $(libPyGubbins_la_OBJECTS) $(libPyGubbins_la_DEPENDENCIES) 
-	$(libPyGubbins_la_LINK) -rpath $(libdir) $(libPyGubbins_la_OBJECTS) $(libPyGubbins_la_LIBADD) $(LIBS)
+	$(LINK) -rpath $(libdir) $(libPyGubbins_la_OBJECTS) $(libPyGubbins_la_LIBADD) $(LIBS)
 libgubbins.la: $(libgubbins_la_OBJECTS) $(libgubbins_la_DEPENDENCIES) 
 	$(libgubbins_la_LINK) -rpath $(libdir) $(libgubbins_la_OBJECTS) $(libgubbins_la_LIBADD) $(LIBS)
 install-binPROGRAMS: $(bin_PROGRAMS)
@@ -376,7 +365,7 @@ include ./$(DEPDIR)/branch_sequences.Plo
 include ./$(DEPDIR)/fasta_of_snp_sites.Plo
 include ./$(DEPDIR)/gff_file.Plo
 include ./$(DEPDIR)/gubbins.Plo
-include ./$(DEPDIR)/libPyGubbins_la-PyGubbins.Plo
+include ./$(DEPDIR)/libPyGubbins.Plo
 include ./$(DEPDIR)/main.Po
 include ./$(DEPDIR)/parse_phylip.Plo
 include ./$(DEPDIR)/parse_vcf.Plo
@@ -542,34 +531,6 @@ run_all_tests-run_all_tests.obj: ../tests/run_all_tests.c
 #	source='../tests/run_all_tests.c' object='run_all_tests-run_all_tests.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
 #	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(run_all_tests_CFLAGS) $(CFLAGS) -c -o run_all_tests-run_all_tests.obj `if test -f '../tests/run_all_tests.c'; then $(CYGPATH_W) '../tests/run_all_tests.c'; else $(CYGPATH_W) '$(srcdir)/../tests/run_all_tests.c'; fi`
-
-.cpp.o:
-	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-#	source='$<' object='$@' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXXCOMPILE) -c -o $@ $<
-
-.cpp.obj:
-	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-#	source='$<' object='$@' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
-
-.cpp.lo:
-	$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
-#	source='$<' object='$@' libtool=yes \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(LTCXXCOMPILE) -c -o $@ $<
-
-libPyGubbins_la-PyGubbins.lo: PyGubbins.cpp
-	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libPyGubbins_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libPyGubbins_la-PyGubbins.lo -MD -MP -MF $(DEPDIR)/libPyGubbins_la-PyGubbins.Tpo -c -o libPyGubbins_la-PyGubbins.lo `test -f 'PyGubbins.cpp' || echo '$(srcdir)/'`PyGubbins.cpp
-	mv -f $(DEPDIR)/libPyGubbins_la-PyGubbins.Tpo $(DEPDIR)/libPyGubbins_la-PyGubbins.Plo
-#	source='PyGubbins.cpp' object='libPyGubbins_la-PyGubbins.lo' libtool=yes \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libPyGubbins_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libPyGubbins_la-PyGubbins.lo `test -f 'PyGubbins.cpp' || echo '$(srcdir)/'`PyGubbins.cpp
 
 mostlyclean-libtool:
 	-rm -f *.lo
