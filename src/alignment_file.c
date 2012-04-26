@@ -24,6 +24,7 @@
 #include <zlib.h>
 #include <regex.h>
 #include <sys/types.h>
+#include <unistd.h>
 #include "kseq.h"
 #include "vcf.h"
 #include "alignment_file.h"

@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
+#include <unistd.h>
 #include "snp_sites.h"
 #include "gubbins.h"
 
@@ -32,16 +33,6 @@ const char* program_name;
 // Your only interested in SNPs, INDELS are ignored
 // The first sequence is chosen as the reference sequence
 // If there is an indel in the reference sequence, the first normal base found in another strain is used.
-
-int check_file_exists_or_exit(char * filename)
-{
-  if( access( filename, F_OK ) != -1 ) {
-		return 1;
-  } else {
-		printf("Error: File '%s' doesnt exist\n",filename);
-		print_usage(stderr, EXIT_FAILURE);
-  }
-}
 
 void print_usage(FILE* stream, int exit_code)
 {
@@ -60,6 +51,17 @@ void print_usage(FILE* stream, int exit_code)
   fprintf (stream, "%s -r -v vcf_file -t newick_tree -p phylip_file alignment_file\n\n", program_name);
   exit (exit_code);
 }
+
+int check_file_exists_or_exit(char * filename)
+{
+  if( access( filename, F_OK ) != -1 ) {
+		return 1;
+  } else {
+		printf("Error: File '%s' doesnt exist\n",filename);
+		print_usage(stderr, EXIT_FAILURE);
+  }
+}
+
 
 int main (argc, argv) int argc; char **argv;
 {
