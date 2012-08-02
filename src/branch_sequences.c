@@ -307,19 +307,28 @@ void get_likelihood_for_windows(char * child_sequence, int length_of_sequence, i
 		//printf("%d\t%d\n",branch_genome_size,number_of_branch_snps);
 		branch_snp_density = snp_density(branch_genome_size, number_of_branch_snps);
 		
-		window_size = calculate_window_size(branch_genome_size, number_of_branch_snps);
-		// start at the coordinate of the first snp
-		window_start_coordinate = snp_site_coords[0];
+		//window_size = calculate_window_size(branch_genome_size, number_of_branch_snps);
+		int number_of_windows_sizes = 4;
+		int window_sizes[4] = {100,1000,10000,calculate_window_size(branch_genome_size, number_of_branch_snps)};
+		//int window_sizes[1] = {calculate_window_size(branch_genome_size, number_of_branch_snps)};
+		int window_iterate = 0;
 		
-		int number_of_windows = (int) ceil(branch_genome_size/window_size);
-		// start coordinate, end coordinate, likelihood
-			
+		int number_of_windows = ((int) ceil(branch_genome_size/window_sizes[0]))*number_of_windows_sizes;
 		int * block_coordinates[2];
-		
-	
 		block_coordinates[0] = (int *) malloc((number_of_windows+1)*sizeof(int));
 		block_coordinates[1] = (int *) malloc((number_of_windows+1)*sizeof(int));
 		number_of_blocks = 0;
+		
+		for(window_iterate = 0; window_iterate < number_of_windows_sizes; window_iterate++)
+		{
+			window_size = window_sizes[window_iterate];
+		// start at the coordinate of the first snp
+		window_start_coordinate = snp_site_coords[0];
+		
+		
+		// start coordinate, end coordinate, likelihood
+			
+		
 			
 		for(i = 0; i < ceil(branch_genome_size*1.0/window_size); i++)
 		{
@@ -370,6 +379,7 @@ void get_likelihood_for_windows(char * child_sequence, int length_of_sequence, i
 			block_coordinates[1][number_of_blocks] = window_end_coordinate;
 			number_of_blocks++;
 		}
+	}
 
 		// block_coordinates will now contain merged blocks
 		number_of_blocks = merge_adjacent_blocks(block_coordinates, number_of_blocks,branch_snp_sequence,number_of_branch_snps,snp_site_coords);
